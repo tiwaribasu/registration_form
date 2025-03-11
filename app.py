@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask import abort
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
@@ -15,6 +16,17 @@ class User(db.Model):
     mobile = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     gst = db.Column(db.String(60), nullable=False)
+
+@app.route('/admin')
+def admin():
+    # Simple password protection (replace with proper authentication in production)
+    password = request.args.get('password')
+    if password != 'admin123':  # Replace with a secure password
+        abort(403)  # Forbidden
+
+    # Query all users from the database
+    users = User.query.all()
+    return render_template('admin.html', users=users)
 
 # Route for the registration page
 @app.route('/register', methods=['GET', 'POST'])
