@@ -8,6 +8,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # SQLite database
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable modification tracking
 db = SQLAlchemy(app)
 
+# Define the home route
+@app.route('/')
+def home():
+    return render_template('home.html')  # Render a simple home page
+
 # User model for the database
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
